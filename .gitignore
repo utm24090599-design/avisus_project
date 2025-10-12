@@ -232,6 +232,8 @@ frontend/.c9/
 frontend/*.launch
 frontend/.settings/
 frontend/*.sublime-workspace
+frontend/.angular/
+
 
 # Visual Studio Code
 frontend/.vscode/*
