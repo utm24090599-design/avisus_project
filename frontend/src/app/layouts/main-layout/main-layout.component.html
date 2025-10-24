@@ -1,5 +1,12 @@
 <!-- Navbar -->
-<app-navbar-layout></app-navbar-layout>
+<!-- Navbar que ahora emite el evento de toggle -->
+<app-navbar-layout (menuToggle)="toggleSidebar()"></app-navbar-layout>
+
+<!-- Sidebar que se muestra/oculta basado en el estado (isSidebarOpen) -->
+<app-sidebar-layout *ngIf="isSidebarOpen" (close)="closeSidebar()"></app-sidebar-layout>
+
+<!-- La salida para el contenido de la ruta (News, Scholarships, etc.) -->
+<router-outlet></router-outlet>
 <!-- Navbar -->
 
 <!-- Header -->
