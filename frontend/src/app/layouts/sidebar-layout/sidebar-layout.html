@@ -1,1 +1,23 @@
-<p>sidebar-layout works!</p>
+<div class="fixed top-0 right-0 h-full w-64 bg-white shadow-xl z-50 p-4">
+    <div class="flex justify-between items-center mb-6">
+        <h2 class="text-3xl font-bold">Avisus</h2>
+        <button (click)="closeSidebar()" class="text-3xl font-light leading-none cursor-pointer">
+            &times; 
+        </button>
+    </div>
+
+    <nav>
+        <ul>
+            <li class="mb-4 text-xl">
+                <a routerLink="/news" class="hover:text-blue-600">News</a>
+            </li>
+            <li class="mb-4 text-xl">
+                <a routerLink="/scholarships" class="hover:text-blue-600">Scholarships</a>
+            </li>
+            <li class="mb-4 text-xl flex items-center">
+                <a routerLink="/community" class="hover:text-blue-600">Community</a>
+                <span class="ml-2 px-2 py-0.5 text-xs font-semibold rounded-full bg-red-100 text-red-800">Beta</span>
+            </li>
+        </ul>
+    </nav>
+</div>
