@@ -1,19 +1,17 @@
 from fastapi import FastAPI, Depends, HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
-from mangum import Mangum
 from sqlalchemy.orm import Session
 from typing import List
-import sys
-import os
 from pathlib import Path
+import sys
 
-# Agregar el directorio raíz al path
+# Agregar el directorio raíz al path (moved before other imports)
 root = Path(__file__).parent.parent
 sys.path.append(str(root))
 
 from config import settings
 from database import get_db, engine
-from schemas import GoogleAuthRequest, TokenResponse, UserResponse
+from schemas import GoogleAuthRequest, TokenResponse, UserResponse, GoogleVerifyResponse, UserBase
 from auth_service import AuthService
 from dependencies import get_current_user
 from models import Base, User
@@ -24,13 +22,8 @@ try:
 except Exception as e:
     print(f"Error creando tablas: {e}")
 
-# Inicializar FastAPI
-app = FastAPI(
-    title="UTMA Role System API",
-    version="1.0.0"
-)
+app = FastAPI(title="UTMA Role System API", version="1.0.0")
 
-# CORS
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -39,27 +32,69 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# AUTH ENDPOINTS
-@app.post("/auth/google", response_model=TokenResponse)
-async def google_auth(
-    auth_request: GoogleAuthRequest,
-    db: Session = Depends(get_db)
-):
-    """Autenticación con Google OAuth"""
+@app.post("/auth/google", response_model=GoogleVerifyResponse)
+async def google_auth_verify(auth_request: GoogleAuthRequest):
+    """
+    Verifica el id_token con Google y devuelve info básica + allowed_roles.
+    No crea usuario ni emite JWT aquí.
+    """
+    info = await AuthService.verify_google_token(auth_request.token)
+    if not info.get("email"):
+        raise HTTPException(status_code=400, detail="Email not found in token")
+    allowed = AuthService.allowed_roles_for_email(info["email"])
+    return {
+        "email": info["email"],
+        "name": info.get("name"),
+        "picture": info.get("picture"),
+        "allowed_roles": allowed
+    }
+
+@app.post("/auth/register", response_model=TokenResponse)
+async def register_with_role(body: dict, db: Session = Depends(get_db)):
+    """
+    Recibe { token, role }:
+     - verifica token Google
+     - valida role permitido
+     - crea usuario si no existe
+     - actualiza last_login y devuelve access_token + user
+    """
+    token = body.get("token")
+    role = body.get("role")
+    if not token or not role:
+        raise HTTPException(status_code=400, detail="token and role required")
+
+    info = await AuthService.verify_google_token(token)
+    email = info.get("email")
+    if not email:
+        raise HTTPException(status_code=400, detail="Email not present")
+
+    allowed = AuthService.allowed_roles_for_email(email)
+    if role not in allowed:
+        raise HTTPException(status_code=403, detail="Role not allowed for this email")
+
+    # check or create user
+    user = db.query(User).filter(User.email == email).first()
+    if not user:
+        user = User(email=email, name=info.get("name") or "", google_id=info.get("google_id"),
+                    picture=info.get("picture"), role=role)
+        db.add(user)
+    else:
+        # update role if different and update picture/name
+        user.role = role
+        user.name = info.get("name") or user.name
+        user.picture = info.get("picture") or user.picture
+
+    from datetime import datetime
+    user.last_login = datetime.utcnow()
     try:
-        google_info = await AuthService.verify_google_token(auth_request.token)
-        user = AuthService.get_or_create_user(db, google_info)
-        access_token = AuthService.create_access_token(
-            data={"user_id": user.id, "email": user.email}
-        )
-        
-        return {
-            "access_token": access_token,
-            "token_type": "bearer",
-            "user": user
-        }
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        db.commit()
+        db.refresh(user)
+    except Exception:
+        db.rollback()
+        raise HTTPException(status_code=500, detail="Error creating/updating user")
+
+    access_token = AuthService.create_access_token(subject=user.email)
+    return {"access_token": access_token, "token_type": "bearer", "user": user}
 
 @app.get("/auth/me", response_model=UserResponse)
 async def get_me(current_user: User = Depends(get_current_user)):

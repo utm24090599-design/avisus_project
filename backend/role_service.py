@@ -1,5 +1,5 @@
 import re
-from typing import Tuple
+from typing import Tuple, List
 
 class RoleService:
     ROLES = {
@@ -49,3 +49,18 @@ class RoleService:
             return ("teachers", role_info["color"], role_info["badge"])
         
         raise ValueError("Formato de correo no reconocido")
+    
+    @staticmethod
+    def get_allowed_roles(email: str) -> List[str]:
+        email = (email or "").lower().strip()
+
+        # estudiante pattern: starts with utm digits and domain utma.edu.mx
+        if re.match(r"^utm\d+@utma\.edu\.mx$", email):
+            return ["estudiante", "jefe de grupo"]
+
+        # profesor pattern: firstname.lastname@utm.edu.mx or domain utm.edu.mx
+        if email.endswith("@utm.edu.mx"):
+            return ["administrador", "trabajador de servicios", "docente"]
+
+        # fallback: no roles
+        return []
