@@ -1,0 +1,59 @@
+.dashboard {
+  max-width: 800px;
+  margin: 40px auto;
+  padding: 0 16px;
+  font-family: 'Segoe UI', sans-serif;
+  color: #1a1a1a;
+}
+
+h1 {
+  text-align: center;
+  color: #1e5fbf;
+  margin-bottom: 24px;
+}
+
+.avisos-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.aviso {
+  background: #f2f6ff;
+  border: 1px solid #d3e2ff;
+  border-radius: 8px;
+  padding: 16px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+}
+
+.aviso h2 {
+  margin: 0 0 8px 0;
+  color: #003366;
+}
+
+.aviso p {
+  margin: 0 0 8px 0;
+  line-height: 1.4;
+}
+
+.fecha {
+  font-size: 0.85rem;
+  color: #555;
+}
+
+.ver-mas {
+  display: block;
+  margin: 24px auto 0;
+  padding: 10px 24px;
+  border: none;
+  background: #1e5fbf;
+  color: white;
+  font-weight: 500;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.ver-mas:hover {
+  background: #184f99;
+}
