@@ -1,8 +1,10 @@
-from fastapi import FastAPI, Depends, HTTPException
+from fastapi import FastAPI, Depends, HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
+from mangum import Mangum
 from sqlalchemy.orm import Session
 from typing import List
 import sys
+import os
 from pathlib import Path
 
 # Agregar el directorio raíz al path
@@ -10,17 +12,17 @@ root = Path(__file__).parent.parent
 sys.path.append(str(root))
 
 from config import settings
-from database import create_tables, get_db
+from database import get_db, engine
 from schemas import GoogleAuthRequest, TokenResponse, UserResponse
 from auth_service import AuthService
 from dependencies import get_current_user
-from models import User
+from models import Base, User
 
-# Crear tablas (solo se ejecuta una vez)
+# Crear tablas si no existen
 try:
-    create_tables()
-except:
-    pass
+    Base.metadata.create_all(bind=engine)
+except Exception as e:
+    print(f"Error creando tablas: {e}")
 
 # Inicializar FastAPI
 app = FastAPI(
@@ -31,7 +33,7 @@ app = FastAPI(
 # CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=settings.ALLOWED_ORIGINS,
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -44,17 +46,20 @@ async def google_auth(
     db: Session = Depends(get_db)
 ):
     """Autenticación con Google OAuth"""
-    google_info = await AuthService.verify_google_token(auth_request.token)
-    user = AuthService.get_or_create_user(db, google_info)
-    access_token = AuthService.create_access_token(
-        data={"user_id": user.id, "email": user.email}
-    )
-    
-    return {
-        "access_token": access_token,
-        "token_type": "bearer",
-        "user": user
-    }
+    try:
+        google_info = await AuthService.verify_google_token(auth_request.token)
+        user = AuthService.get_or_create_user(db, google_info)
+        access_token = AuthService.create_access_token(
+            data={"user_id": user.id, "email": user.email}
+        )
+        
+        return {
+            "access_token": access_token,
+            "token_type": "bearer",
+            "user": user
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 @app.get("/auth/me", response_model=UserResponse)
 async def get_me(current_user: User = Depends(get_current_user)):
@@ -101,5 +106,6 @@ async def root():
         "version": "1.0.0"
     }
 
-# Este handler es necesario para Vercel
-handler = app
+@app.get("/health")
+async def health():
+    return {"status": "healthy"}
