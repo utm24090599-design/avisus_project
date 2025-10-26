@@ -19,7 +19,7 @@ import { NgClass } from '@angular/common';
   styles: [
     `
       .primary-button {
-        padding: 0.75rem 1.5rem;
+        padding: 0.45rem 1rem;
         border-radius: 0.375rem;
         font-weight: 600;
         background-color: #3b82f6;

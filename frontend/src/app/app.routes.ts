@@ -1,19 +1,25 @@
-// src/app/app.routes.ts
-
 import { Routes } from '@angular/router';
-import { MainLayoutComponent } from './layouts/main-layout/main-layout.component';
+import { LoginComponent } from './shared/components/cell/login.component/login.component';
+import { RegisterComponent } from './shared/components/cell/register.component/register.component';
+import { DashboardComponent } from './shared/components/organice/dashboard.component/dashboard.component';
+import { authGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
-  {
-    path: '',
-    // ELIMINA LA LÍNEA component: MainLayoutComponent,
-    // component: MainLayoutComponent, // <--- ¡Comentar o Eliminar esta línea!
-    children: [
-      {
-        path: '',
-        redirectTo: 'home',
-        pathMatch: 'full'
-      }
-    ]
-  }
+  {
+    path: '',
+    children: [
+      // {
+      //   path: '',
+      //   redirectTo: 'home',
+      //   pathMatch: 'full',
+      // },
+      { path: 'login', component: LoginComponent },
+      { path: 'register', component: RegisterComponent },
+      {
+        path: '',
+        component: DashboardComponent,
+        canActivate: [authGuard],
+      },
+    ],
+  },
 ];
