@@ -8,6 +8,10 @@ from models import User
 from sqlalchemy.orm import Session
 from role_service import RoleService
 import jwt
+from passlib.context import CryptContext
+
+# Configurar contexto de hashing de passwords
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 class AuthService:
     @staticmethod
@@ -50,3 +54,14 @@ class AuthService:
             raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Token expired")
         except Exception:
             raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token")
+    
+    @staticmethod
+    def hash_password(password: str) -> str:
+        """Hashea una contraseña usando bcrypt"""
+        print(f"Password received: {repr(password)}")
+        return pwd_context.hash(password)
+    
+    @staticmethod
+    def verify_password(plain_password: str, hashed_password: str) -> bool:
+        """Verifica si una contraseña coincide con su hash"""
+        return pwd_context.verify(plain_password, hashed_password)

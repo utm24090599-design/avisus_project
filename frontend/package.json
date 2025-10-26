@@ -7,7 +7,9 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "serve:ssr:frontend": "node dist/frontend/server/server.mjs"
+    "serve:ssr:frontend": "node dist/frontend/server/server.mjs",
+    "dev:ssr": "NODE_ENV=development node dist/server.js",
+    "start:ssr": "NODE_ENV=production node dist/server.js"
   },
   "prettier": {
     "printWidth": 100,
@@ -32,6 +34,7 @@
     "@angular/router": "^20.3.0",
     "@angular/ssr": "^20.3.5",
     "@tailwindcss/postcss": "^4.1.16",
+    "dotenv": "^17.2.3",
     "express": "^5.1.0",
     "postcss": "^8.5.6",
     "rxjs": "~7.8.0",
@@ -45,6 +48,7 @@
     "@types/express": "^5.0.1",
     "@types/jasmine": "~5.1.0",
     "@types/node": "^20.17.19",
+    "cross-env": "^10.1.0",
     "jasmine-core": "~5.9.0",
     "karma": "~6.4.0",
     "karma-chrome-launcher": "~3.2.0",
