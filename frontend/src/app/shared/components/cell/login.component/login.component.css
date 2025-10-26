@@ -1,0 +1,261 @@
+.login-page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-flow: row;
+  min-height: 100vh;
+  /* background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); */
+
+  *{
+    user-select: none;
+  }
+}
+
+.login-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  width: 80%;
+  max-width: 900px;
+  height: auto;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  background: #392d6a;
+  backdrop-filter: blur(10px);
+
+  transition: height 1s ease;
+}
+
+.login-button {
+  width: 40%;
+  height: 40px;
+  border: none;
+  border-radius: 5px;
+  background-color: #4285f4;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1rem;
+  box-shadow: 0px 0px 102px -39px rgb(66, 133, 244) inset;
+  -webkit-box-shadow: 0px 0px 102px -39px rgba(66, 133, 244, 1) inset;
+  -moz-box-shadow: 0px 0px 102px -39px rgba(66, 133, 244, 1) inset;
+  transition: all 0.3s ease;
+}
+
+.login-button:hover:not(:disabled) {
+  background-color: #357ae8;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(66, 133, 244, 0.4);
+}
+
+.login-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+hr {
+  border: none;
+  width: 100%;
+  height: 1px;
+  background-color: rgba(119, 119, 119, 0.562);
+  margin: 20px 0;
+}
+
+.image {
+  grid-column: 1/2;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url('../../../../assets/planets-7031048_1280.jpg') no-repeat center center/cover;
+  filter: brightness(0.7);
+}
+
+form {
+  width: 100%;
+}
+
+.input-group {
+  display: grid;
+  grid-template-rows: 0.5fr 1fr;
+  /* outline: 1px solid red; */
+  width: 90%;
+  height: auto;
+  text-align: start;
+
+  label {
+    color: white;
+    font-size: 20px;
+    font-weight: bolder;
+    height: 30px;
+  }
+
+  input {
+    height: 40px;
+    border-radius: 5px;
+    border: none;
+    padding: 0 10px;
+    font-size: 16px;
+    background-color: #6651bb;
+    box-shadow: 0px 0px 102px -39px rgb(90, 39, 168) inset;
+    -webkit-box-shadow: 0px 0px 102px -39px rgba(90, 39, 168, 1) inset;
+    -moz-box-shadow: 0px 0px 102px -39px rgba(90, 39, 168, 1) inset;
+    -moz-user-input: disabled;
+  }
+
+  input:focus {
+    outline: none;
+    border: none;
+  }
+
+  input:-webkit-autofill {
+    background-color: #f0f8ff;
+    color: #000;
+    border: 2px solid #00bfff;
+    transition: background-color 500ms ease-in-out;
+  }
+
+  .error-text {
+    color: #ff6b6b;
+    font-size: 12px;
+    margin-top: 5px;
+    display: block;
+  }
+}
+
+.login-card {
+  background: #392d6a;
+  padding: 3rem 2rem;
+  /* border-radius: 0 0 20px 0; */
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  text-align: center;
+  width: 100%;
+  animation: fadeIn 0.5s;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.logo {
+  font-size: 2em;
+  text-align: start;
+  color: white;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+h1 {
+  color: #333;
+  margin-bottom: 0.5rem;
+  font-size: 2rem;
+}
+
+.subtitle {
+  color: #ffffff;
+  margin-bottom: 2rem;
+  font-size: 0.9rem;
+}
+
+.google-btn-container {
+  margin: 2rem 0;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.google-signin-wrapper {
+  width: 90%;
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.or-text {
+  color: white;
+  font-size: 14px;
+  margin: 0;
+}
+
+#googleSignInButton {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.loading {
+  margin: 2rem 0;
+}
+
+.spinner {
+  border: 3px solid #f3f3f3;
+  border-top: 3px solid #667eea;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+  margin: 0 auto;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.error-message {
+  background: #fee;
+  color: #c33;
+  padding: 1rem;
+  border-radius: 10px;
+  margin-top: 1rem;
+  animation: shake 0.5s;
+}
+
+@keyframes shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-10px);
+  }
+  75% {
+    transform: translateX(10px);
+  }
+}
+
+.register-link {
+  margin-top: 1.5rem;
+  color: white;
+}
+
+.register-link p {
+  font-size: 14px;
+}
+
+.register-link .link {
+  color: #4285f4;
+  cursor: pointer;
+  text-decoration: underline;
+  font-weight: 600;
+}
+
+.register-link .link:hover {
+  color: #357ae8;
+}

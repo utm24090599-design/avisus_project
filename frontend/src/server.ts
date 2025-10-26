@@ -6,10 +6,28 @@ import {
 } from '@angular/ssr/node';
 import express from 'express';
 import { join } from 'node:path';
+import { buildSecurityHeaders } from './ssr/security-headers';
 
 const browserDistFolder = join(import.meta.dirname, '../browser');
 
 const app = express();
+
+if (!process.env['NODE_ENV']) {
+  console.warn('⚠️ NODE_ENV no está definido. Usando "dev" por defecto.');
+}
+
+app.use((req, res, next) => {
+  const env = process.env['NODE_ENV'] === 'production' ? 'prod' : 'dev';
+  const headers = buildSecurityHeaders(env);
+
+  for (const [key, value] of Object.entries(headers)) {
+    res.setHeader(key, value);
+  }
+
+  next();
+});
+
+
 const angularApp = new AngularNodeAppEngine();
 
 /**
@@ -32,7 +50,7 @@ app.use(
     maxAge: '1y',
     index: false,
     redirect: false,
-  }),
+  })
 );
 
 /**
@@ -41,9 +59,7 @@ app.use(
 app.use((req, res, next) => {
   angularApp
     .handle(req)
-    .then((response) =>
-      response ? writeResponseToNodeResponse(response, res) : next(),
-    )
+    .then((response) => (response ? writeResponseToNodeResponse(response, res) : next()))
     .catch(next);
 });
 
@@ -61,6 +77,8 @@ if (isMainModule(import.meta.url) || process.env['pm_id']) {
     console.log(`Node Express server listening on http://localhost:${port}`);
   });
 }
+
+
 
 /**
  * Request handler used by the Angular CLI (for dev-server and during build) or Firebase Cloud Functions.
