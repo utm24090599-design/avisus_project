@@ -7,9 +7,6 @@ import {
 import express from 'express';
 import { join } from 'node:path';
 import { buildSecurityHeaders } from './ssr/security-headers';
-import dotenv from 'dotenv';
-
-dotenv.config();
 
 const browserDistFolder = join(import.meta.dirname, '../browser');
 

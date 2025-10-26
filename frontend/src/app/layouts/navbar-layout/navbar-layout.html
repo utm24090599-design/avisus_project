@@ -2,7 +2,10 @@
   <div class="navbar-container">
     <a class="navbar-brand" href="/"><h1 class="nav-title">Avisus</h1></a>
     <ul class="navbar-menu">
-      <li class="navbar-item" (click)="onLogingClick()"><app-primary-button class="text-[10px]">Log in</app-primary-button></li>
+
+      @if(!currentUser() && currentRouter().endsWith('/login')) {<li class="navbar-item" (click)="onLogingClick()"><app-primary-button class="text-[10px]">Log in</app-primary-button></li>}
+      @if(currentUser() && !currentRouter().endsWith('/login')) {<li class="navbar-item" (click)="logout()"><app-primary-button class="text-[10px]">Log out</app-primary-button></li>}
+
       <li class="navbar-item">
         <app-hamburger-button (click)="onMenuClick()"/>
       </li>

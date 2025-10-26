@@ -1,5 +1,4 @@
 * {
-  /* outline: 1px solid red; For debugging purposes */
   text-decoration: none;
 }
 
@@ -7,12 +6,10 @@
   padding: 0;
   width:100%;
   height: 80px;
-  position: fixed;
   top: 0;
   left: 0;
   right: 0;
   background-color: white;
-  /* z-index: 1000; */
   transition: transform 0.3s ease-in-out;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }

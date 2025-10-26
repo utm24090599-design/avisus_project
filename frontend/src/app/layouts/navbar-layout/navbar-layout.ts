@@ -1,9 +1,18 @@
-import { Component, Output, EventEmitter, HostListener, signal, PLATFORM_ID, inject } from '@angular/core';
+import {
+  Component,
+  Output,
+  EventEmitter,
+  HostListener,
+  inject,
+  PLATFORM_ID,
+  signal,
+  computed
+} from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
-import { HamburgerButton } from '../../shared/components/atoms/hamburger-button/hamburger-button';
-import { PrimaryButtonComponent } from "../../shared/components/atoms/buttons/primary-button.component";
 import { Router } from '@angular/router';
-
+import { HamburgerButton } from '../../shared/components/atoms/hamburger-button/hamburger-button';
+import { PrimaryButtonComponent } from '../../shared/components/atoms/buttons/primary-button.component';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-navbar-layout',
@@ -13,52 +22,46 @@ import { Router } from '@angular/router';
   styleUrl: './navbar-layout.css'
 })
 export class NavbarLayout {
-    private platformId = inject(PLATFORM_ID);
-    private isBrowser: boolean;
-    
-    @Output() menuToggle = new EventEmitter<void>(); 
+  private platformId = inject(PLATFORM_ID);
+  private isBrowser = isPlatformBrowser(this.platformId);
+  private authService = inject(AuthService);
+  private router = inject(Router);
 
-    isNavbarVisible = signal(true);
-    private lastScrollTop = 0;
-    private scrollThreshold = 10;
+  @Output() menuToggle = new EventEmitter<void>();
 
-    constructor(private router: Router) {
-      this.isBrowser = isPlatformBrowser(this.platformId);
+  isNavbarVisible = signal(true);
+  private lastScrollTop = 0;
+  private scrollThreshold = 10;
+
+  readonly currentUser = this.authService.currentUser;
+  readonly currentRouter = computed(() => this.router.url);
+
+  @HostListener('window:scroll')
+  onWindowScroll() {
+    if (!this.isBrowser) return;
+
+    const currentScroll = window.pageYOffset || document.documentElement.scrollTop;
+
+    if (currentScroll <= 0) {
+      this.isNavbarVisible.set(true);
+      return;
     }
 
-    @HostListener('window:scroll')
-    onWindowScroll() {
-      if (!this.isBrowser) return;
+    if (Math.abs(currentScroll - this.lastScrollTop) < this.scrollThreshold) return;
 
-      const currentScroll = window.pageYOffset || document.documentElement.scrollTop;
-      
-      // Si estamos en la parte superior, siempre mostrar
-      if (currentScroll <= 0) {
-        this.isNavbarVisible.set(true);
-        return;
-      }
+    this.isNavbarVisible.set(currentScroll < this.lastScrollTop);
+    this.lastScrollTop = currentScroll;
+  }
 
-      // Detectar dirección del scroll
-      if (Math.abs(currentScroll - this.lastScrollTop) < this.scrollThreshold) {
-        return;
-      }
+  onMenuClick() {
+    this.menuToggle.emit();
+  }
 
-      if (currentScroll > this.lastScrollTop) {
-        // Scrolling down
-        this.isNavbarVisible.set(false);
-      } else {
-        // Scrolling up
-        this.isNavbarVisible.set(true);
-      }
+  onLogingClick() {
+    this.router.navigate(['/login']);
+  }
 
-      this.lastScrollTop = currentScroll;
-    }
-
-    onMenuClick() {
-        this.menuToggle.emit();
-    }
-
-    onLogingClick(){
-      this.router.navigate(['/login']);
-    }
+  logout() {
+    this.authService.logout();
+  }
 }
