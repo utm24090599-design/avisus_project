@@ -2,7 +2,7 @@
 
 
 # Byte-compiled / optimized / DLL files
-backend/__pycache__/
+backend/__pycache__
 backend/*.py[codz]
 backend/*$py.class
 
