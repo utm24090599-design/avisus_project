@@ -288,15 +288,3 @@ async def root():
 @app.get("/health")
 async def health():
     return {"status": "healthy"}
-
-
-# ============================================
-# HANDLER PARA VERCEL - DEBE SER LA ÚLTIMA LÍNEA
-# ============================================
-from mangum import Mangum
-
-# Crear handler para Vercel
-handler = Mangum(app, lifespan="off")
-
-# Vercel busca la variable 'handler' o 'app'
-app = app  # Asegura que app esté disponible
