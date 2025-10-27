@@ -295,3 +295,8 @@ def handler(request, response):
     from mangum import Mangum
     mangum_handler = Mangum(app)
     return mangum_handler(request, response)
+    
+from mangum import Mangum
+
+# Crear handler para Vercel
+handler = Mangum(app, lifespan="off")
