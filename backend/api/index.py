@@ -289,8 +289,14 @@ async def root():
 async def health():
     return {"status": "healthy"}
 
-if __name__ == "__main__":
-    import uvicorn
-    import os
-    port = int(os.getenv("PORT", 8000))
-    uvicorn.run(app, host="0.0.0.0", port=port)
+
+# ============================================
+# HANDLER PARA VERCEL - DEBE SER LA ÚLTIMA LÍNEA
+# ============================================
+from mangum import Mangum
+
+# Crear handler para Vercel
+handler = Mangum(app, lifespan="off")
+
+# Vercel busca la variable 'handler' o 'app'
+app = app  # Asegura que app esté disponible
