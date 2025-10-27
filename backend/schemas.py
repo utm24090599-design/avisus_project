@@ -1,9 +1,9 @@
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel
 from datetime import datetime
 from typing import Optional
 
 class UserBase(BaseModel):
-    email: EmailStr
+    email: str  # ← Cambiar de EmailStr a str
     name: str
 
 class UserResponse(BaseModel):
@@ -15,7 +15,7 @@ class UserResponse(BaseModel):
     role_color: str
     role_badge: str
     created_at: datetime
-    last_login: Optional[datetime]
+    last_login: datetime
     
     class Config:
         from_attributes = True
@@ -27,10 +27,3 @@ class TokenResponse(BaseModel):
 
 class GoogleAuthRequest(BaseModel):
     token: str
-
-# Response from /auth/google before registration
-class GoogleVerifyResponse(BaseModel):
-    email: EmailStr
-    name: str
-    picture: Optional[str]
-    allowed_roles: list[str]
