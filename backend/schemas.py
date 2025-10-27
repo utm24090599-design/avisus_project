@@ -1,7 +1,7 @@
 # schemas.py
 from pydantic import BaseModel
 from datetime import datetime
-from typing import Optional
+from typing import Optional, List
 
 class UserBase(BaseModel):
     email: str
@@ -20,7 +20,7 @@ class UserResponse(BaseModel):
     role_color: str
     role_badge: str
     created_at: datetime
-    last_login: datetime
+    last_login: Optional[datetime]
     
     class Config:
         from_attributes = True
@@ -36,10 +36,6 @@ class GoogleAuthRequest(BaseModel):
 class GoogleVerifyResponse(BaseModel):
     """Respuesta de verificación de Google OAuth"""
     email: str
-    name: str
+    name: Optional[str] = None
     picture: Optional[str] = None
-    sub: str  # Google User ID
-    iss: str  # Issuer (accounts.google.com)
-    aud: str  # Audience (tu client ID)
-    exp: int  # Expiration timestamp
-    iat: int  # Issued at timestamp
+    allowed_roles: List[str] = []  # ← ESTO FALTABA
