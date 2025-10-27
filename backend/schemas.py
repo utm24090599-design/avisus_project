@@ -1,10 +1,15 @@
+# schemas.py
 from pydantic import BaseModel
 from datetime import datetime
 from typing import Optional
 
 class UserBase(BaseModel):
-    email: str  # ← Cambiar de EmailStr a str
+    email: str
     name: str
+
+class UserCreate(UserBase):
+    google_id: str
+    picture: Optional[str] = None
 
 class UserResponse(BaseModel):
     id: int
@@ -27,3 +32,14 @@ class TokenResponse(BaseModel):
 
 class GoogleAuthRequest(BaseModel):
     token: str
+
+class GoogleVerifyResponse(BaseModel):
+    """Respuesta de verificación de Google OAuth"""
+    email: str
+    name: str
+    picture: Optional[str] = None
+    sub: str  # Google User ID
+    iss: str  # Issuer (accounts.google.com)
+    aud: str  # Audience (tu client ID)
+    exp: int  # Expiration timestamp
+    iat: int  # Issued at timestamp
