@@ -296,7 +296,13 @@ def handler(request, response):
     mangum_handler = Mangum(app)
     return mangum_handler(request, response)
     
+# Importar Mangum
 from mangum import Mangum
 
-# Crear handler para Vercel
-handler = Mangum(app, lifespan="off")
+# NO uses try-except aquí
+handler = Mangum(app, lifespan="off", api_gateway_base_path="/")
+
+# Para debugging en Vercel
+if __name__ != "__main__":
+    # Este es el entry point para Vercel
+    pass
