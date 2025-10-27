@@ -289,20 +289,8 @@ async def root():
 async def health():
     return {"status": "healthy"}
 
-# Handler para Vercel (serverless)
-def handler(request, response):
-    """Handler para Vercel serverless functions"""
-    from mangum import Mangum
-    mangum_handler = Mangum(app)
-    return mangum_handler(request, response)
-    
-# Importar Mangum
-from mangum import Mangum
-
-# NO uses try-except aquí
-handler = Mangum(app, lifespan="off", api_gateway_base_path="/")
-
-# Para debugging en Vercel
-if __name__ != "__main__":
-    # Este es el entry point para Vercel
-    pass
+if __name__ == "__main__":
+    import uvicorn
+    import os
+    port = int(os.getenv("PORT", 8000))
+    uvicorn.run(app, host="0.0.0.0", port=port)
