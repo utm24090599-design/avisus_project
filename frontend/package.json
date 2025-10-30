@@ -8,6 +8,7 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "serve:ssr:frontend": "node dist/frontend/server/server.mjs",
+    "build:ssr": "ng build && ng run avisus-project:server",
     "dev:ssr": "NODE_ENV=development node dist/server.js",
     "start:ssr": "NODE_ENV=production node dist/server.js"
   },
