@@ -1,10 +1,15 @@
-from pydantic import BaseModel, EmailStr
+# schemas.py
+from pydantic import BaseModel
 from datetime import datetime
-from typing import Optional
+from typing import Optional, List
 
 class UserBase(BaseModel):
-    email: EmailStr
+    email: str
     name: str
+
+class UserCreate(UserBase):
+    google_id: str
+    picture: Optional[str] = None
 
 class UserResponse(BaseModel):
     id: int
@@ -28,9 +33,9 @@ class TokenResponse(BaseModel):
 class GoogleAuthRequest(BaseModel):
     token: str
 
-# Response from /auth/google before registration
 class GoogleVerifyResponse(BaseModel):
-    email: EmailStr
-    name: str
-    picture: Optional[str]
-    allowed_roles: list[str]
+    """Respuesta de verificación de Google OAuth"""
+    email: str
+    name: Optional[str] = None
+    picture: Optional[str] = None
+    allowed_roles: List[str] = []  # ← ESTO FALTABA

@@ -5,9 +5,7 @@
 
     @for( aviso of avisos | slice:0:avisosVisibles(); track aviso) {
       <div class="aviso">
-        <h2>{{ aviso.titulo }}</h2>
-        <p>{{ aviso.descripcion }}</p>
-        <span class="fecha">{{ aviso.fecha }}</span>
+        <app-card-layout></app-card-layout>
       </div>
     }
   </div>

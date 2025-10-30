@@ -2,6 +2,7 @@ import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CardLayout } from "../card-layout/card-layout";
 
+
 @Component({
   selector: 'app-news-layout',
   imports: [CommonModule, CardLayout],

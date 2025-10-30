@@ -288,10 +288,3 @@ async def root():
 @app.get("/health")
 async def health():
     return {"status": "healthy"}
-
-# Handler para Vercel (serverless)
-def handler(request, response):
-    """Handler para Vercel serverless functions"""
-    from mangum import Mangum
-    mangum_handler = Mangum(app)
-    return mangum_handler(request, response)
