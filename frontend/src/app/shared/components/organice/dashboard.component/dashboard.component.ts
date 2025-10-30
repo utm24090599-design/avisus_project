@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { AuthService } from '../../../../services/auth.service';
 import { UserService } from '../../../../services/user.service';
 import { User } from '../../../../models/user.model';
+import { NewsLayout } from '../../../../layouts/news-layout/news-layout';
 
 interface Filter {
   id: string;
@@ -13,7 +14,7 @@ interface Filter {
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, NewsLayout],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css']
 })

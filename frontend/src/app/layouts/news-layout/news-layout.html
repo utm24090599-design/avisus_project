@@ -1,1 +1,16 @@
-<p>news-layout works!</p>
+<div class="dashboard">
+  <h1>{{ title() }}</h1>
+
+  <div class="avisos-container">
+
+    @for( aviso of avisos | slice:0:avisosVisibles(); track aviso) {
+      <div class="aviso">
+        <h2>{{ aviso.titulo }}</h2>
+        <p>{{ aviso.descripcion }}</p>
+        <span class="fecha">{{ aviso.fecha }}</span>
+      </div>
+    }
+  </div>
+
+  <button class="ver-mas" (click)="verMas()">Ver más</button>
+</div>
