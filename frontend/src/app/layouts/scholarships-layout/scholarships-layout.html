@@ -1,1 +1,14 @@
-<p>scholarships-layout works!</p>
+<div class="dashboard">
+  <h1>{{ title() }}</h1>
+
+  <div class="avisos-container">
+
+    @for( aviso of avisos | slice:0:avisosVisibles(); track aviso) {
+      <div class="aviso">
+        <app-card-layout></app-card-layout>
+      </div>
+    }
+  </div>
+
+  <button class="ver-mas" (click)="verMas()">Ver más</button>
+</div>
