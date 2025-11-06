@@ -11,6 +11,7 @@
   }
 }
 
+
 .login-content {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -22,8 +23,24 @@
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
   background: #392d6a;
   backdrop-filter: blur(10px);
-
   transition: height 1s ease;
+}
+
+@media (max-width: 900px) {
+  .login-content {
+    width: 98%;
+  }
+}
+
+@media (max-width: 700px) {
+  .login-content {
+    grid-template-columns: 1fr;
+    width: 100%;
+    min-width: 0;
+  }
+  .image {
+    display: none !important;
+  }
 }
 
 .login-button {

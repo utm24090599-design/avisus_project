@@ -1,14 +1,24 @@
-<!-- Navbar -->
-<!-- Navbar que ahora emite el evento de toggle -->
-<app-navbar-layout (menuToggle)="toggleSidebar()"></app-navbar-layout>
 
-<!-- Sidebar que se muestra/oculta basado en el estado (isSidebarOpen) -->
-<app-sidebar-layout *ngIf="isSidebarOpen" (close)="closeSidebar()"></app-sidebar-layout>
+<div class="main-layout__container">
+	<!-- Navbar -->
+	<header class="main-layout__navbar">
+		<app-navbar-layout (menuToggle)="toggleSidebar()"></app-navbar-layout>
+	</header>
 
-<!-- La salida para el contenido de la ruta (News, Scholarships, etc.) -->
-<router-outlet></router-outlet>
-<!-- Navbar -->
+	<!-- Sidebar y contenido -->
+	<div class="main-layout__body">
+		<aside class="main-layout__sidebar" [class.open]="isSidebarOpen">
+			<app-sidebar-layout *ngIf="isSidebarOpen" (close)="closeSidebar()"></app-sidebar-layout>
+		</aside>
+		<main class="main-layout__content">
+			<router-outlet></router-outlet>
+		</main>
+	</div>
 
-<!-- Header -->
-<!-- Main -->
-<!-- Footer -->
+	<!-- Footer -->
+	<footer class="main-layout__footer">
+		<div class="footer-content">
+			<span>© 2025 Avisus. Todos los derechos reservados.</span>
+		</div>
+	</footer>
+</div>
