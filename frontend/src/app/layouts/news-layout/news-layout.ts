@@ -23,11 +23,6 @@ export class NewsLayout {
       descripcion: 'SiS',
       fecha: 'hoy'
     },
-    {
-      titulo: 'ajoliñolaleñoun',
-      descripcion: 'Sigma',
-      fecha: ' 90 oct 379809'
-    }
   ];
 
 
